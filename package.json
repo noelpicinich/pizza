@@ -1,0 +1,16 @@
+{
+  "name": "pizza",
+  "version": "1.0.0",
+  "description": "A web app for placing and tracking pizza orders!",
+  "scripts": {
+    "start:backend": "cd packages/backend && npm run start",
+    "start:frontend": "cd packages/frontend && npm run start"
+  },
+  "author": "Noel Picinich",
+  "license": "ISC",
+  "workspaces": [
+    "packages/backend",
+    "packages/frontend",
+    "packages/shared"
+  ]
+}

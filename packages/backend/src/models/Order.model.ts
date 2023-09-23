@@ -1,0 +1,83 @@
+import { CreationOptional, InferCreationAttributes } from 'sequelize';
+import { Table, Column, Model, DataType, AutoIncrement, PrimaryKey, AllowNull, CreatedAt, BelongsTo, ForeignKey } from 'sequelize-typescript';
+import OrderStatus from 'shared/types/enums/OrderStatus';
+import IOrder from 'shared/types/models/IOrder';
+import Customer from './Customer.model';
+
+@Table({
+    tableName: 'orders',
+    underscored: true,
+    timestamps: true,
+    updatedAt: false
+})
+export default class Order extends Model<IOrder, InferCreationAttributes<Order>> {
+    @PrimaryKey
+    @AutoIncrement
+    @AllowNull(false)
+    @Column({
+        type: DataType.INTEGER.UNSIGNED
+    })
+    public id: CreationOptional<number>;
+
+    @ForeignKey(() => Customer)
+    @Column({
+        type: DataType.INTEGER.UNSIGNED
+    })
+    public customerId: number | null;
+
+    @Column({
+        type: DataType.INTEGER.UNSIGNED
+    })
+    public paymentId: number | null;
+
+    @AllowNull(false)
+    @Column({
+        type: DataType.STRING(20)
+    })
+    public status: OrderStatus;
+
+    @AllowNull(false)
+    @Column({
+        type: DataType.BOOLEAN
+    })
+    public isDelivery: boolean;
+
+    @Column({
+        type: DataType.INTEGER.UNSIGNED
+    })
+    public deliveryAddressId: number | null;
+
+    @CreatedAt
+    @AllowNull(false)
+    @Column({
+        type: 'TIMESTAMP'
+    })
+    public createdAt: CreationOptional<Date | string>;
+
+    @Column({
+        type: 'TIMESTAMP'
+    })
+    public completedAt: CreationOptional<Date | string>;
+
+    @Column({
+        type: 'TIMESTAMP'
+    })
+    public cancelledAt: CreationOptional<Date | string>;
+
+    public formatForAPI(): IOrder {
+        return {
+            id: this.id,
+            customerId: this.customerId,
+            paymentId: this.paymentId,
+            status: this.status,
+            isDelivery: this.isDelivery,
+            deliveryAddressId: this.deliveryAddressId,
+            createdAt: this.createdAt,
+            completedAt: this.completedAt,
+            cancelledAt: this.cancelledAt
+        }
+    }
+    
+    @BelongsTo(() => Customer)
+    public customer: Customer;
+}
