@@ -1,5 +1,17 @@
 import { CreationOptional, InferCreationAttributes } from 'sequelize';
-import { Table, Column, Model, DataType, AutoIncrement, PrimaryKey, AllowNull, CreatedAt, UpdatedAt, BelongsTo, ForeignKey } from 'sequelize-typescript';
+import {
+    Table,
+    Column,
+    Model,
+    DataType,
+    AutoIncrement,
+    PrimaryKey,
+    AllowNull,
+    CreatedAt,
+    UpdatedAt,
+    BelongsTo,
+    ForeignKey
+} from 'sequelize-typescript';
 import ICustomerAddress from 'shared/types/models/ICustomerAddress';
 import Customer from './Customer.model';
 
@@ -9,20 +21,23 @@ import Customer from './Customer.model';
     timestamps: true,
     updatedAt: false
 })
-export default class CustomerAddress extends Model<ICustomerAddress, InferCreationAttributes<CustomerAddress>> {
+export default class CustomerAddress extends Model<
+    ICustomerAddress,
+    InferCreationAttributes<CustomerAddress>
+> {
     @PrimaryKey
     @AutoIncrement
     @AllowNull(false)
     @Column({
-        type: DataType.INTEGER.UNSIGNED
-    })  
+        type: DataType.INTEGER
+    })
     public id: CreationOptional<number>;
 
     @ForeignKey(() => Customer)
     @AllowNull(false)
     @Column({
-        type: DataType.INTEGER.UNSIGNED
-    })  
+        type: DataType.INTEGER
+    })
     public customerId: number;
 
     @Column({

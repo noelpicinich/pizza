@@ -1,4 +1,5 @@
 import OrderStatus from "../enums/OrderStatus";
+import IPizza from "./IPizza";
 
 export default interface IOrder {
     id: number;
@@ -10,4 +11,5 @@ export default interface IOrder {
     createdAt: Date | string;
     completedAt: Date | string | null;
     cancelledAt: Date | string | null;
+    pizzas?: IPizza[];
 }

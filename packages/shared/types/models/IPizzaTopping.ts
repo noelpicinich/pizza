@@ -1,5 +1,7 @@
+import PizzaHalf from "../enums/PizzaHalf";
+
 export default interface IPizzaTopping {
     pizzaId: number;
     toppingId: number;
-    half: number | null;
+    half: PizzaHalf | null;
 }

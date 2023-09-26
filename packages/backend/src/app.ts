@@ -1,5 +1,6 @@
 import 'reflect-metadata';
 import 'dotenv';
+import '@models/index';
 import Express from 'express';
 import { useExpressServer } from 'routing-controllers';
 import path from 'path';
@@ -15,4 +16,3 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Listening on port ${port}...`);
 });
-

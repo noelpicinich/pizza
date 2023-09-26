@@ -1,5 +1,16 @@
 import { CreationOptional, InferCreationAttributes } from 'sequelize';
-import { Table, Column, Model, DataType, AutoIncrement, PrimaryKey, AllowNull, CreatedAt, UpdatedAt, HasMany } from 'sequelize-typescript';
+import {
+    Table,
+    Column,
+    Model,
+    DataType,
+    AutoIncrement,
+    PrimaryKey,
+    AllowNull,
+    CreatedAt,
+    UpdatedAt,
+    HasMany
+} from 'sequelize-typescript';
 import ICustomer from 'shared/types/models/ICustomer';
 import CustomerAddress from './CustomerAddress.model';
 import Order from './Order.model';
@@ -9,26 +20,27 @@ import Order from './Order.model';
     underscored: true,
     timestamps: true
 })
-export default class Customer extends Model<ICustomer, InferCreationAttributes<Customer>> {
+export default class Customer extends Model<
+    ICustomer,
+    InferCreationAttributes<Customer>
+> {
     @PrimaryKey
     @AutoIncrement
     @AllowNull(false)
     @Column({
-        type: DataType.INTEGER.UNSIGNED
-    })  
+        type: DataType.INTEGER
+    })
     public id: CreationOptional<number>;
 
-    @AllowNull(false)
     @Column({
         type: DataType.STRING(50)
     })
-    public firstName: string;
+    public firstName: CreationOptional<string>;
 
-    @AllowNull(false)
     @Column({
         type: DataType.STRING(50)
     })
-    public lastName: string;
+    public lastName: CreationOptional<string>;
 
     @AllowNull(false)
     @Column({
@@ -36,11 +48,10 @@ export default class Customer extends Model<ICustomer, InferCreationAttributes<C
     })
     public email: string;
 
-    @AllowNull(false)
     @Column({
         type: DataType.STRING(20)
     })
-    public phoneNumber: string;
+    public phoneNumber: CreationOptional<string>;
 
     @CreatedAt
     @AllowNull(false)
@@ -57,8 +68,8 @@ export default class Customer extends Model<ICustomer, InferCreationAttributes<C
     public updatedAt: CreationOptional<Date | string>;
 
     @HasMany(() => CustomerAddress)
-    public addresses: CustomerAddress[];
+    public addresses?: CustomerAddress[];
 
     @HasMany(() => Order)
-    public orders: Order[];
+    public orders?: Order[];
 }

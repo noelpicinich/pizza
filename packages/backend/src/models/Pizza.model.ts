@@ -1,11 +1,23 @@
 import { CreationOptional, InferCreationAttributes } from 'sequelize';
-import { Table, Column, Model, DataType, AutoIncrement, PrimaryKey, AllowNull, CreatedAt, HasMany, BelongsTo, BelongsToMany } from 'sequelize-typescript';
+import {
+    Table,
+    Column,
+    Model,
+    DataType,
+    AutoIncrement,
+    PrimaryKey,
+    AllowNull,
+    CreatedAt,
+    HasMany,
+    BelongsTo,
+    BelongsToMany,
+    ForeignKey
+} from 'sequelize-typescript';
 import PizzaSize from 'shared/types/enums/PizzaSize';
 import IPizza from 'shared/types/models/IPizza';
 import Topping from './Topping.model';
 import Order from './Order.model';
 import PizzaTopping from './PizzaTopping.model';
-
 
 @Table({
     tableName: 'pizzas',
@@ -13,18 +25,22 @@ import PizzaTopping from './PizzaTopping.model';
     timestamps: true,
     updatedAt: false
 })
-export default class Pizza extends Model<IPizza, InferCreationAttributes<Pizza>> {
+export default class Pizza extends Model<
+    IPizza,
+    InferCreationAttributes<Pizza>
+> {
     @PrimaryKey
     @AutoIncrement
     @AllowNull(false)
     @Column({
-        type: DataType.INTEGER.UNSIGNED
+        type: DataType.INTEGER
     })
     public id: CreationOptional<number>;
 
+    @ForeignKey(() => Order)
     @AllowNull(false)
     @Column({
-        type: DataType.INTEGER.UNSIGNED
+        type: DataType.INTEGER
     })
     public orderId: number;
 
@@ -42,8 +58,20 @@ export default class Pizza extends Model<IPizza, InferCreationAttributes<Pizza>>
     public createdAt: CreationOptional<Date | string>;
 
     @BelongsTo(() => Order)
-    public order: Order;
+    public order?: Order;
 
     @BelongsToMany(() => Topping, () => PizzaTopping)
-    public toppings: Topping[];
+    public toppings?: Topping[];
+
+    public formatForAPI(): IPizza {
+        return {
+            id: this.id,
+            orderId: this.orderId,
+            size: this.size,
+            createdAt: this.createdAt,
+            ...this.toppings && {
+                toppings: this.toppings.map(topping => topping.formatForAPI())
+            }
+        }
+    }
 }

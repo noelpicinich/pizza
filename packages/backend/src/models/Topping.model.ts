@@ -1,5 +1,15 @@
 import { CreationOptional, InferCreationAttributes } from 'sequelize';
-import { Table, Column, Model, DataType, AutoIncrement, PrimaryKey, AllowNull, Default, BelongsToMany } from 'sequelize-typescript';
+import {
+    Table,
+    Column,
+    Model,
+    DataType,
+    AutoIncrement,
+    PrimaryKey,
+    AllowNull,
+    Default,
+    BelongsToMany
+} from 'sequelize-typescript';
 import ToppingType from 'shared/types/enums/ToppingType';
 import ITopping from 'shared/types/models/ITopping';
 import PizzaTopping from './PizzaTopping.model';
@@ -8,14 +18,17 @@ import Pizza from './Pizza.model';
 @Table({
     tableName: 'toppings',
     underscored: true,
-    timestamps: false,
+    timestamps: false
 })
-export default class Topping extends Model<ITopping, InferCreationAttributes<Topping>> {
+export default class Topping extends Model<
+    ITopping,
+    InferCreationAttributes<Topping>
+> {
     @PrimaryKey
     @AutoIncrement
     @AllowNull(false)
     @Column({
-        type: DataType.INTEGER.UNSIGNED
+        type: DataType.INTEGER
     })
     public id: CreationOptional<number>;
 
@@ -46,4 +59,14 @@ export default class Topping extends Model<ITopping, InferCreationAttributes<Top
 
     @BelongsToMany(() => Pizza, () => PizzaTopping)
     public pizzas: Pizza[];
+
+    public formatForAPI(): ITopping {
+        return {
+            id: this.id,
+            type: this.type,
+            name: this.name,
+            price: this.price,
+            disabled: this.disabled
+        }
+    }
 }

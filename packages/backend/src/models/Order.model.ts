@@ -1,8 +1,21 @@
 import { CreationOptional, InferCreationAttributes } from 'sequelize';
-import { Table, Column, Model, DataType, AutoIncrement, PrimaryKey, AllowNull, CreatedAt, BelongsTo, ForeignKey } from 'sequelize-typescript';
+import {
+    Table,
+    Column,
+    HasMany,
+    Model,
+    DataType,
+    AutoIncrement,
+    PrimaryKey,
+    AllowNull,
+    CreatedAt,
+    BelongsTo,
+    ForeignKey
+} from 'sequelize-typescript';
 import OrderStatus from 'shared/types/enums/OrderStatus';
 import IOrder from 'shared/types/models/IOrder';
 import Customer from './Customer.model';
+import Pizza from './Pizza.model';
 
 @Table({
     tableName: 'orders',
@@ -10,23 +23,26 @@ import Customer from './Customer.model';
     timestamps: true,
     updatedAt: false
 })
-export default class Order extends Model<IOrder, InferCreationAttributes<Order>> {
+export default class Order extends Model<
+    IOrder,
+    InferCreationAttributes<Order>
+> {
     @PrimaryKey
     @AutoIncrement
     @AllowNull(false)
     @Column({
-        type: DataType.INTEGER.UNSIGNED
+        type: DataType.INTEGER
     })
     public id: CreationOptional<number>;
 
     @ForeignKey(() => Customer)
     @Column({
-        type: DataType.INTEGER.UNSIGNED
+        type: DataType.INTEGER
     })
     public customerId: number | null;
 
     @Column({
-        type: DataType.INTEGER.UNSIGNED
+        type: DataType.INTEGER
     })
     public paymentId: number | null;
 
@@ -43,7 +59,7 @@ export default class Order extends Model<IOrder, InferCreationAttributes<Order>>
     public isDelivery: boolean;
 
     @Column({
-        type: DataType.INTEGER.UNSIGNED
+        type: DataType.INTEGER
     })
     public deliveryAddressId: number | null;
 
@@ -74,10 +90,16 @@ export default class Order extends Model<IOrder, InferCreationAttributes<Order>>
             deliveryAddressId: this.deliveryAddressId,
             createdAt: this.createdAt,
             completedAt: this.completedAt,
-            cancelledAt: this.cancelledAt
-        }
+            cancelledAt: this.cancelledAt,
+            ...this.pizzas && {
+                pizzas: this.pizzas.map(pizza => pizza.formatForAPI())
+            }
+        };
     }
-    
+
     @BelongsTo(() => Customer)
-    public customer: Customer;
+    public customer?: Customer;
+
+    @HasMany(() => Pizza)
+    public pizzas?: Pizza[];
 }
